@@ -346,7 +346,7 @@ def start_game():
     global cur_game, config, v_player, bgm
     v_player.stop()
     bgm.stop()
-    if cur_game[0].game_type == 'Arcade':  # TODO extend to other types
+    if cur_game[0].game_type == 'arcade':  # TODO extend to other types
         game = subprocess.Popen(config['mame_exec'] + ' %s' % cur_game[0].name + ' -rompath ' + config['rom_path']
                                 + ' -skip_gameinfo')
     else:
