@@ -1,0 +1,31 @@
+<config>
+    <entry>
+        <key>rom_path</key>
+        <value>ROM/</value>
+    </entry>
+        <entry>
+            <!--backslash must be included for Windows-->
+        <key>exe_path</key>
+        <value>shortcuts\</value>
+    </entry>
+    <entry>
+        <key>image_path</key>
+        <value>image/</value>
+    </entry>
+    <entry>
+        <key>preview_path</key>
+        <value>video/</value>
+    </entry>
+    <entry>
+        <key>mame_exec</key>
+        <value>mame/mame64.exe</value>
+    </entry>
+    <entry>
+        <key>audio_path</key>
+        <value>audio/</value>
+    </entry>
+    <entry>
+        <key>gif_bg</key>
+        <value>True</value>
+    </entry>
+</config>

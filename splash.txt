@@ -1,0 +1,9 @@
+* asterisks denote comments
+* do not include spaces in between the bars
+88games.zip|'88 Games|Konami. 1988
+asteroid.zip|Asteroids|Atari. 1979
+centiped.zip|Centipede|Atari. 1980
+invaddlx.zip|Space Invaders Part II|Taito. 1979
+pacman.zip|Pac-Man|Nintendo. 1978
+suprmrio.zip|Vs. Super Mario Bros.|Nintendo. 1986
+brutal_doom.lnk|Brutal Doom|Sergeant_Mark_IV. 2012

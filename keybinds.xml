@@ -1,0 +1,26 @@
+<controls>
+    <bind>
+        <key>Up</key>
+        <value>Key_Up</value>
+    </bind>
+    <bind>
+        <key>Down</key>
+        <value>Key_Down</value>
+    </bind>
+    <bind>
+        <key>Left</key>
+        <value>Key_Left</value>
+    </bind>
+    <bind>
+        <key>Right</key>
+        <value>Key_Right</value>
+    </bind>
+    <bind>
+        <key>Select</key>
+        <value>Key_Return</value>
+    </bind>
+    <bind>
+        <key>Select</key>
+        <value>Key_Z</value>
+    </bind>
+</controls>
