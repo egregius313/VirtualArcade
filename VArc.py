@@ -233,7 +233,7 @@ class VArcMain(QWidget):
             if anim.shadow_lbl.isVisible():
                 pos = anim.shadow_lbl.pos()
                 if anim.shadow_lbl == self.center:
-                    pos.setX(pos.x() + 30)
+                    pos.setX(pos.x() + 120)
                 anim.targetObject().show()
                 anim.setDuration(100)
                 anim.setEndValue(pos)

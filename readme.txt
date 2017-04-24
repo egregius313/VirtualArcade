@@ -4,7 +4,7 @@ STANDARDS:
 - 640 x 480 .mp4 preview videos
 - click is .wav
 - bgm is .mp3
-- Rom files are .zip
+- ROM files are .zip
 - shortcuts are .lnk
 
 DEFAULT FILE STRUCTURE:
