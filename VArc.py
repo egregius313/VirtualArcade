@@ -43,7 +43,6 @@ def read_conf():
 
 
 class VArcMain(QWidget):
-    # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
     def __init__(self):
         global bgm, wheel_anims
 
@@ -134,7 +133,6 @@ class VArcMain(QWidget):
                     v_player.load(x.name + '.mp4')
                     v_player.play()
                 lbl.show()
-                # noinspection PyArgumentList
                 vbox.addWidget(lbl)
                 lbl.setFocus()
 
@@ -218,7 +216,6 @@ class VArcMain(QWidget):
             cur_game[0] = self.games[cur_game[1]]
         self.center = layout.itemAt(2).widget()
 
-        # noinspection PyArgumentList
         QApplication.instance().processEvents()
         self.anim_wheel(up)
 
