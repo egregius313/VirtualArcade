@@ -58,7 +58,7 @@ class VArcMain(QWidget):
         self.wheel = None
 
         self.click = QSoundEffect()
-        self.click.setSource(QUrl.fromLocalFile(config['audio_path'] + 'click.wav'))
+        self.click.setSource(QUrl.fromLocalFile(config['audio_path'] + 'wheelSFX.wav'))
 
         bgm = QMediaPlayer(self)
         bgm.setMedia(QMediaContent(QUrl.fromLocalFile(config['audio_path'] + 'bgm.mp3')))
