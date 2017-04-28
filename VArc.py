@@ -20,16 +20,48 @@ class Game:
         self.emu_info = emu_info
         self.game_type = game_type
 
+    def __cmp__(self, other):
+        if isinstance(other, Game):
+            if self.display > other.display:
+                return 1
+            elif self.display < other.display:
+                return -1
+            else:
+                return 0
 
-v_player = None
+    def __lt__(self, other):
+        if isinstance(other, Game):
+            if self.display < other.display:
+                return True
+            else:
+                return False
+
+    def __gt__(self, other):
+        if isinstance(other, Game):
+            if self.display > other.display:
+                return True
+            else:
+                return False
+    
+    def __eq__(self, other):
+        if isinstance(other, Game):
+            if self.display == other.display:
+                return True
+            else:
+                return False
+
+
+v_player = None  # These globals are probably a bad idea
 bgm = None
 cur_game = None
-config = {'rom_path': 'ROM/', 'exe_path': 'shortcuts/', 'image_path': 'image/', 'preview_path': 'video/',
-          'mame_exec': 'mame/mame.exe', 'audio_path': 'audio/', 'gif_bg': 'True'}
 top_pos = QPoint()
 bot_pos = QPoint()
 wheel_anims = None
 center = None
+
+# These defaults are overridden by config.xml, if the values are present
+config = {'rom_path': 'ROM/', 'exe_path': 'shortcuts/', 'image_path': 'image/', 'preview_path': 'video/',
+          'mame_exec': 'mame/mame.exe', 'audio_path': 'audio/', 'gif_bg': 'True', 'flip_scrolling': 'False'}
 
 
 def read_conf():
@@ -54,26 +86,30 @@ class VArcMain(QWidget):
         self.right = []
         self.select = []
 
-        # Misc
-        self.wheel = None
+        self.labels = []
 
+        # Wheel/Game List
+        self.wheel = None
+        self.center = None
+        self.splash = None
+        wheel_anims = QParallelAnimationGroup()
+        self.games = populate_games()
+
+        # Media
         self.click = QSoundEffect()
         self.click.setSource(QUrl.fromLocalFile(config['audio_path'] + 'wheelSFX.wav'))
-
         bgm = QMediaPlayer(self)
         bgm.setMedia(QMediaContent(QUrl.fromLocalFile(config['audio_path'] + 'bgm.mp3')))
         bgm.setVolume(30)
         bgm.play()
 
-        # List info
-        self.center = None
-        self.splash = None
-        wheel_anims = QParallelAnimationGroup()
-
+        # Startup
         read_conf()
-        self.games = populate_games()
-        self.labels = []
         self.read_keys()
+
+        if config['flip_scrolling'] == 'True':
+            self.up, self.down = self.down, self.up
+
         self.init_ui()
 
     def init_ui(self):
@@ -93,11 +129,11 @@ class VArcMain(QWidget):
 
         bg.setMovie(bg_mov)
         bg_mov.start()
-        hbox = QHBoxLayout(bg)
-        vbox = QVBoxLayout(bg)
-        self.wheel = vbox
-        hbox.addLayout(vbox)
-        hbox.addStretch(1)
+        h_box = QHBoxLayout(bg)
+        v_box = QVBoxLayout(bg)
+        self.wheel = v_box
+        h_box.addLayout(v_box)
+        h_box.addStretch(1)
 
         v_player = VideoPlayer(640, 480)
         v_player.setFixedSize(640, 480)
@@ -109,19 +145,13 @@ class VArcMain(QWidget):
         v_container.addWidget(self.splash, alignment=Qt.AlignCenter)
         v_container.addWidget(v_player, alignment=Qt.AlignAbsolute)
         v_container.addStretch(1)
-        hbox.addLayout(v_container)
-        hbox.addStretch(1)
+        h_box.addLayout(v_container)
+        h_box.addStretch(1)
 
         w_labels = []
         for a, x in enumerate(self.games):
             lbl = QLabel(self)
             lbl.hide()
-            # if os.path.isfile(config['image_path'] + x.name + '.png'):
-            #     pixmap = QPixmap(config['image_path'] + x.name + '.png').scaled(400, 175, Qt.KeepAspectRatio)
-            #     lbl.setPixmap(pixmap)
-            # else:
-            #     lbl.setStyleSheet('color: white; font-size: 38pt')
-            #     lbl.setText(x.display)
             lbl.setFixedSize(400, 175)
             self.labels.append(lbl)
             if a < 5:
@@ -133,7 +163,7 @@ class VArcMain(QWidget):
                     v_player.load(x.name + '.mp4')
                     v_player.play()
                 lbl.show()
-                vbox.addWidget(lbl)
+                v_box.addWidget(lbl)
                 lbl.setFocus()
 
             w_label = QLabel(self)
@@ -169,12 +199,6 @@ class VArcMain(QWidget):
                 a[0].hide()
 
     def keyPressEvent(self, e):
-        # global bgv
-        # player = bgv.mediaPlayer
-        # print('state: ' + str(player.state()))
-        # print('mediaStatus: ' + str(player.mediaStatus()))
-        # print('error: ' + str(player.error()))
-
         if e.key() in self.down:
             self.move_wheel(False)
             try_preview()
@@ -383,6 +407,7 @@ def populate_games() -> [Game]:
                     games.append(Game(file.rstrip('.zip'), info[0], info[1], 'arcade'))
                 elif file.endswith('.lnk'):
                     games.append(Game(file.rstrip('.lnk'), info[0], info[1], 'exe'))
+    games.sort()  # consider a better data structure?
 
     return games
 

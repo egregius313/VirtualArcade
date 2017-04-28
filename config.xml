@@ -28,4 +28,9 @@
         <key>gif_bg</key>
         <value>True</value>
     </entry>
+    <entry>
+        <!--Added for convenience. The controls could alternatively be swapped manually-->
+        <key>flip_scrolling</key>
+        <value>False</value>
+    </entry>
 </config>

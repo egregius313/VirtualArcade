@@ -6,4 +6,4 @@ centiped.zip|Centipede|Atari. 1980
 invaddlx.zip|Space Invaders Part II|Taito. 1979
 pacman.zip|Pac-Man|Nintendo. 1978
 suprmrio.zip|Vs. Super Mario Bros.|Nintendo. 1986
-brutal_doom.lnk|Brutal Doom|Sergeant_Mark_IV. 2012
+brutal_doom.lnk|Doom|Id Software. 1993
