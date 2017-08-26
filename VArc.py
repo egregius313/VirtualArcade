@@ -1,3 +1,4 @@
+from functools import total_ordering
 import random
 import subprocess
 import sys
@@ -13,6 +14,7 @@ from PyQt5.QtCore import (Qt, QUrl, QSizeF, QSize, QPropertyAnimation, QPoint,
                           QParallelAnimationGroup, QEasingCurve, QAbstractAnimation)
 
 
+@total_ordering
 class Game:
     def __init__(self, name: str, display: str, emu_info=None, game_type="Arcade"):
         self.name = name
@@ -20,35 +22,22 @@ class Game:
         self.emu_info = emu_info
         self.game_type = game_type
 
-    def __cmp__(self, other):
-        if isinstance(other, Game):
-            if self.display > other.display:
-                return 1
-            elif self.display < other.display:
-                return -1
-            else:
-                return 0
-
     def __lt__(self, other):
         if isinstance(other, Game):
-            if self.display < other.display:
-                return True
-            else:
-                return False
+            return self.display < other.display
+        return NotImplemented
 
     def __gt__(self, other):
         if isinstance(other, Game):
-            if self.display > other.display:
-                return True
-            else:
-                return False
-    
+            return self.display > other.display:
+        else:
+            return NotImplemented
+
     def __eq__(self, other):
         if isinstance(other, Game):
-            if self.display == other.display:
-                return True
-            else:
-                return False
+            return self.display == other.display:
+        else:
+            return NotImplemented
 
 
 v_player = None  # These globals are probably a bad idea
@@ -276,22 +265,12 @@ class VArcMain(QWidget):
         for bind in root:
             key = bind.find('key').text
             try:
-                value = eval('Qt.' + bind.find('value').text)
+                value = getattr(Qt, bind.find('value').text)
             except AttributeError:
-                print('Invalid keybind: ' + bind.find('value').text)
-                value = None
-            if value is not None:
-                if key == 'Up':
-                    self.up.append(value)
-                elif key == 'Down':
-                    self.down.append(value)
-                elif key == 'Left':
-                    self.left.append(value)
-                elif key == 'Right':
-                    self.right.append(value)
-                elif key == 'Select':
-                    self.select.append(value)
-
+                print('Invalid keybind:', bind.find('value').text)
+            else:
+                getattr(self, key.lower(), []).append(value)
+                
 
 class WheelAnimation(QPropertyAnimation):
     def __init__(self, target, field, shadow_lbl):
@@ -380,18 +359,16 @@ def start_game():
 
 
 def populate_games() -> [Game]:
-    to_ignore = []
     with open('ignore.txt', 'r') as f:
-        for line in f:
-            to_ignore.append(line.rstrip('\n'))
+        to_ignore = [line.rstrip('\n') for line in f]
 
     game_dict = {}
     with open('splash.txt') as s:
         for line in s:
-            if line[0] == '*':
+            if line.startswith('*'):
                 continue
-            line = line.split('|')
-            game_dict[line[0]] = (line[1], line[2].rstrip('\n'))
+            line = line.rstrip('\n').split('|')
+            game_dict[line[0]] = (line[1], line[2])
 
     games = []
     dirs = (config['rom_path'], config['exe_path'])
