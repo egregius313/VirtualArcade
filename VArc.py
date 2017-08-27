@@ -1,4 +1,5 @@
 from functools import total_ordering
+from glob import glob
 import random
 import subprocess
 import sys
@@ -360,7 +361,7 @@ def start_game():
 
 def populate_games() -> [Game]:
     with open('ignore.txt', 'r') as f:
-        to_ignore = [line.rstrip('\n') for line in f]
+        to_ignore = {line.rstrip('\n') for line in f}
 
     game_dict = {}
     with open('splash.txt') as s:
@@ -373,17 +374,14 @@ def populate_games() -> [Game]:
     games = []
     dirs = (config['rom_path'], config['exe_path'])
     for direc in dirs:
-        for file in os.listdir(direc):
-            if file not in to_ignore:
-                try:
-                    info = game_dict[file]
-                except KeyError:
-                    print('Could not find info for ' + file + ', skipping')
-                    continue
-                if file.endswith(".zip"):
-                    games.append(Game(file.rstrip('.zip'), info[0], info[1], 'arcade'))
-                elif file.endswith('.lnk'):
-                    games.append(Game(file.rstrip('.lnk'), info[0], info[1], 'exe'))
+        for zip in set(glob('*.zip')) & game_dict.keys() - to_ignore:
+            name, source = game_dict[file]
+            games.append(Game(zip.rstrip('.zip'), name, source, 'arcade'))
+            
+        for lnk in set(glob('*.lnk')) & game_dict.keys() - to_ignore:
+            name, source = game_dict[file]
+            games.append(Game(lnk.rstrip('.lnk'), name, source, 'exe'))
+
     games.sort()  # consider a better data structure?
 
     return games
