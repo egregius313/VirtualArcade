@@ -367,8 +367,8 @@ def populate_games() -> [Game]:
         for line in s:
             if line.startswith('*'):
                 continue
-            line = line.rstrip('\n').split('|')
-            game_dict[line[0]] = (line[1], line[2])
+            file, name, source = line.rstrip('\n').split('|')
+            game_dict[file] = (name, source)
 
     games = []
     dirs = (config['rom_path'], config['exe_path'])
