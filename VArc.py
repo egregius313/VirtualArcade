@@ -179,7 +179,7 @@ class VArcMain(QWidget):
 
         for a in w_labels:
             pos = a[1].pos()
-            if pos.x() is not 0:
+            if pos.x() != 0:
                 if a[1] == self.center:
                     a[0].move(pos.x() + 30, pos.y())
                 else:
